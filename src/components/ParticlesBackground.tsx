@@ -1,48 +1,29 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Particles from 'react-tsparticles';
-import { loadSlim } from 'tsparticles-slim';
-import type { Engine } from 'tsparticles-engine';
+import { useEffect } from 'react';
+import Script from 'next/script';
+
+declare global {
+  interface Window {
+    particlesJS: any;
+  }
+}
 
 export default function ParticlesBackground() {
-  const [init, setInit] = useState(false);
 
   useEffect(() => {
-    const initialize = async () => {
-      const engine = await import('tsparticles-engine');
 
-      await loadSlim(engine.tsParticles);
+    const initParticles = () => {
 
-      setInit(true);
-    };
+      if (!window.particlesJS) return;
 
-    initialize();
-  }, []);
-
-  if (!init) return null;
-
-  return (
-    <Particles
-      id="particles"
-      className="fixed inset-0 -z-0"
-      options={{
-        fullScreen: {
-          enable: false,
-        },
-
-        background: {
-          color: '#020617',
-        },
-
-        fpsLimit: 60,
-
+      window.particlesJS('particles-js', {
         particles: {
           number: {
             value: 90,
             density: {
               enable: true,
-              area: 900,
+              value_area: 900,
             },
           },
 
@@ -64,7 +45,7 @@ export default function ParticlesBackground() {
             random: true,
           },
 
-          links: {
+          line_linked: {
             enable: true,
             distance: 140,
             color: '#38bdf8',
@@ -75,19 +56,23 @@ export default function ParticlesBackground() {
           move: {
             enable: true,
             speed: 1.5,
+            direction: 'none',
+            random: false,
+            straight: false,
+            out_mode: 'out',
           },
         },
 
         interactivity: {
-          detectsOn: 'window',
+          detect_on: 'window',
 
           events: {
-            onHover: {
+            onhover: {
               enable: true,
               mode: 'grab',
             },
 
-            onClick: {
+            onclick: {
               enable: true,
               mode: 'push',
             },
@@ -99,19 +84,44 @@ export default function ParticlesBackground() {
             grab: {
               distance: 220,
 
-              links: {
+              line_linked: {
                 opacity: 0.8,
               },
             },
 
             push: {
-              quantity: 6,
+              particles_nb: 6,
             },
           },
         },
 
-        detectRetina: true,
-      }}
-    />
+        retina_detect: true,
+      });
+
+    };
+
+    const timeout = setTimeout(initParticles, 200);
+
+    return () => clearTimeout(timeout);
+
+  }, []);
+
+  return (
+    <>
+      <Script
+        src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"
+        strategy="afterInteractive"
+      />
+
+      <div
+        id="particles-js"
+        className="
+          fixed
+          inset-0
+          z-0
+          pointer-events-none
+        "
+      />
+    </>
   );
 }
