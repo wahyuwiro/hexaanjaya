@@ -56,5 +56,4 @@ export const clientLogos: ClientLogo[] = [
   { name: 'BPR Jwalita', src: '/bpr-jwalita.png' },
   { name: 'BPR Tanjung Tani', src: '/bpr-tanjung-tani.ico' },
   // PLACEHOLDER: tambahkan logo klien Koperasi di sini.
-  { name: '[Nama Koperasi Klien]' },
 ];
