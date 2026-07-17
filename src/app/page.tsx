@@ -225,8 +225,8 @@ export default function Home() {
       <ParticlesBackground /> 
       <div className="relative z-10">
         {/* Glow */}
-      <div className="fixed -top-32 -left-32 h-125 w-125 rounded-full bg-blue-500/20 blur-[100px]" />
-      <div className="fixed bottom-0 right-[-100px] h-[500px] w-[500px] rounded-full bg-cyan-400/10 blur-[100px]" />
+      <div className="pointer-events-none fixed -top-32 -left-32 h-125 w-125 rounded-full bg-blue-500/20 blur-[100px]" />
+      <div className="pointer-events-none fixed bottom-0 right-[-100px] h-[500px] w-[500px] rounded-full bg-cyan-400/10 blur-[100px]" />
 
       <Navbar />
 
