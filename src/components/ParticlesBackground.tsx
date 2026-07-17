@@ -5,7 +5,7 @@ import Script from 'next/script';
 
 declare global {
   interface Window {
-    particlesJS: any;
+    particlesJS: (tagId: string, params: Record<string, unknown>) => void;
   }
 }
 

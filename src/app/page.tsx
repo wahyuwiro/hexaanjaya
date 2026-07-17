@@ -1,11 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
 import { Inter } from 'next/font/google';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ParticlesBackground from '@/components/ParticlesBackground';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { products } from '@/data/products';
+import { buildWhatsAppLink } from '@/data/site';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,32 +21,32 @@ const services = [
   {
     icon: '🏦',
     title: 'Core Banking System',
-    desc: 'Modern banking system with transaction, reporting and security features.',
+    desc: 'Sistem perbankan modern dengan fitur transaksi, pelaporan, dan keamanan.',
   },
   {
     icon: '📱',
     title: 'Mobile & SMS Banking',
-    desc: 'Mobile banking solutions for better customer accessibility.',
+    desc: 'Solusi mobile banking untuk aksesibilitas nasabah yang lebih baik.',
   },
   {
     icon: '💻',
-    title: 'Custom Software Development',
-    desc: 'Web and desktop applications tailored to business operations.',
+    title: 'Pengembangan Perangkat Lunak Custom',
+    desc: 'Aplikasi web dan desktop yang disesuaikan dengan operasional bisnis.',
   },
   {
     icon: '📊',
-    title: 'Reporting & Compliance',
-    desc: 'SID, SLIK, PPATK integration and regulatory reporting.',
+    title: 'Pelaporan & Kepatuhan',
+    desc: 'Integrasi SID, SLIK, PPATK, dan pelaporan regulasi.',
   },
   {
     icon: '🌐',
-    title: 'Web Design',
-    desc: 'Professional modern websites and company profiles.',
+    title: 'Desain Website',
+    desc: 'Website modern dan company profile yang profesional.',
   },
   {
     icon: '🛠️',
-    title: 'Support & Maintenance',
-    desc: 'Continuous technical assistance and implementation support.',
+    title: 'Dukungan & Pemeliharaan',
+    desc: 'Bantuan teknis berkelanjutan dan dukungan implementasi.',
   },
 ];
 
@@ -121,9 +125,29 @@ export default function Home() {
       ease: 'power3.out',
     });
 
+    // PRODUCTS
+
+    gsap.utils.toArray<Element>('.product-card').forEach((card, i) => {
+
+      gsap.from(card, {
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+
+        opacity: 0,
+        y: 60,
+        duration: 0.8,
+        delay: i * 0.1,
+        ease: 'power3.out',
+      });
+
+    });
+
     // SERVICES
 
-    gsap.utils.toArray('.service-card').forEach((card: any, i) => {
+    gsap.utils.toArray<Element>('.service-card').forEach((card, i) => {
 
       gsap.from(card, {
         scrollTrigger: {
@@ -143,7 +167,7 @@ export default function Home() {
 
     // JOURNEY
 
-    gsap.utils.toArray('.timeline-item').forEach((item: any, i) => {
+    gsap.utils.toArray<Element>('.timeline-item').forEach((item, i) => {
 
       gsap.from(item, {
         scrollTrigger: {
@@ -204,38 +228,7 @@ export default function Home() {
       <div className="fixed -top-32 -left-32 h-125 w-125 rounded-full bg-blue-500/20 blur-[100px]" />
       <div className="fixed bottom-0 right-[-100px] h-[500px] w-[500px] rounded-full bg-cyan-400/10 blur-[100px]" />
 
-      {/* Navbar */}
-      <nav className="fixed top-0 z-50 w-full border-b border-white/10 bg-slate-950/70 backdrop-blur-lg">
-        <div className="mx-auto flex w-[90%] max-w-7xl items-center justify-between py-5">
-          <div className="flex items-center gap-3">
-
-            {/* <Image
-              src="/logo.png"
-              alt="HEXA ANJAYA TECH"
-              width={42}
-              height={42}
-              priority
-              className="h-10 w-10 object-contain"
-            /> */}
-
-            <h1 className="font-extrabold tracking-wide">
-              HEXA
-              <span className="text-cyan-400">
-                {' '}ANJAYA TECH
-              </span>
-            </h1>
-
-          </div>
-
-          <div className="hidden gap-8 md:flex">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#services">Services</a>
-            <a href="#journey">Journey</a>
-            <a href="#contact">Contact</a>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero */}
       <section
@@ -246,32 +239,39 @@ export default function Home() {
         <div className="mx-auto grid w-[90%] max-w-7xl grid gap-16 items-start lg:grid-cols-2">
           <div>
             <div className="hero-badge mb-6 inline-block rounded-full border border-white/10 bg-white/5 px-5 py-2 text-cyan-400">
-              Trusted Technology Partner Since 2017
+              Mitra Teknologi Terpercaya Sejak 2017
             </div>
 
             <h1 className="hero-title mb-6 text-5xl font-extrabold leading-tight lg:text-7xl">
-              Building
+              Membangun
               <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">
                 {' '}
-                Digital Solutions
+                Solusi Digital
               </span>
               <br />
-              for Banking & Business Growth
+              untuk Perbankan & Pertumbuhan Bisnis
             </h1>
 
             <p className="hero-text mb-8 max-w-xl text-slate-300">
-              PT. HEXA ANJAYA TECH provides IT solutions for banking,
-              cooperatives and institutions with secure and scalable systems.
+              PT. HEXA ANJAYA TECH menyediakan solusi teknologi informasi
+              untuk perbankan, koperasi, dan instansi dengan sistem yang
+              aman dan skalabel.
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <button className="rounded-full bg-gradient-to-r cursor-pointer from-blue-600 to-cyan-400 px-7 py-4 font-semibold shadow-lg shadow-blue-500/30 transition hover:-translate-y-1">
-                Explore Services
-              </button>
+              <a
+                href="#services"
+                className="rounded-full bg-gradient-to-r cursor-pointer from-blue-600 to-cyan-400 px-7 py-4 font-semibold shadow-lg shadow-blue-500/30 transition hover:-translate-y-1"
+              >
+                Jelajahi Layanan
+              </a>
 
-              <button className="rounded-full cursor-pointer border border-white/20 px-7 py-4 hover:bg-white/5">
-                Learn More
-              </button>
+              <a
+                href="#about"
+                className="rounded-full cursor-pointer border border-white/20 px-7 py-4 hover:bg-white/5"
+              >
+                Pelajari Lebih Lanjut
+              </a>
             </div>
           </div>
 
@@ -290,15 +290,15 @@ export default function Home() {
             "
           >
             <h3 className="mb-6 text-2xl font-bold">
-              Technology Solutions
+              Solusi Teknologi
             </h3>
 
             <div className="grid gap-5 md:grid-cols-2">
               {[
-                ['8+', 'Years Experience'],
-                ['100%', 'Customizable'],
-                ['24/7', 'Support'],
-                ['Secure', 'Enterprise'],
+                ['8+', 'Tahun Pengalaman'],
+                ['100%', 'Dapat Disesuaikan'],
+                ['24/7', 'Dukungan'],
+                ['Aman', 'Kelas Enterprise'],
               ].map(([title, text]) => (
                 <div
                   key={title}
@@ -326,30 +326,86 @@ export default function Home() {
         <div className="mx-auto grid w-[90%] max-w-7xl gap-16 lg:grid-cols-2">
           <div>
             <h2 className="mb-5 text-5xl font-bold">
-              About Our Company
+              Tentang Perusahaan Kami
             </h2>
 
             <p className="text-slate-400">
-              PT. HEXA ANJAYA TECH supports digital transformation
-              across banking, cooperatives and institutions.
+              PT. HEXA ANJAYA TECH mendukung transformasi digital di
+              sektor perbankan, koperasi, dan instansi.
             </p>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/5 p-10 backdrop-blur-lg">
             <p className="mb-5 text-slate-300">
-              Founded in 2017 and continuously evolving
-              alongside modern technology demands.
+              Didirikan pada tahun 2017 dan terus berkembang
+              mengikuti kebutuhan teknologi modern.
             </p>
 
             <p className="mb-5 text-slate-300">
-              Expanded and transformed into PT. HEXA
-              ANJAYA TECH in 2025.
+              Berkembang dan bertransformasi menjadi PT. HEXA
+              ANJAYA TECH pada tahun 2025.
             </p>
 
             <p className="text-slate-300">
-              Specialized in banking applications,
-              mobile banking and enterprise software.
+              Berfokus pada aplikasi perbankan, mobile banking,
+              dan perangkat lunak enterprise.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Produk Unggulan */}
+      <section
+        id="produk"
+        className="py-28"
+      >
+        <div className="mx-auto w-[90%] max-w-7xl">
+          <h2 className="mb-5 text-5xl font-bold">
+            Produk Unggulan
+          </h2>
+
+          <p className="mb-16 max-w-2xl text-slate-400">
+            Solusi core banking system yang kami kembangkan khusus
+            untuk kebutuhan Koperasi dan BPR di Indonesia.
+          </p>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {products.map((product) => (
+              <Link
+                key={product.slug}
+                href={`/produk/${product.slug}`}
+                className="product-card group rounded-3xl border border-white/10 bg-white/5 p-8 transition hover:-translate-y-2 hover:border-cyan-400/50"
+              >
+                <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-400 text-2xl">
+                  {product.icon}
+                </div>
+
+                <span className="mb-3 inline-block rounded-full bg-cyan-500/10 px-3 py-1 text-sm font-semibold text-cyan-400">
+                  {product.category}
+                </span>
+
+                <h3 className="mb-3 text-xl font-bold">
+                  {product.name}
+                </h3>
+
+                <p className="mb-4 text-slate-400">
+                  {product.tagline}
+                </p>
+
+                <span className="font-semibold text-cyan-400 group-hover:underline">
+                  Lihat Detail &rarr;
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <Link
+              href="/produk"
+              className="inline-block rounded-full border border-white/20 px-7 py-4 hover:bg-white/5"
+            >
+              Lihat Semua Produk
+            </Link>
           </div>
         </div>
       </section>
@@ -361,7 +417,7 @@ export default function Home() {
       >
         <div className="mx-auto w-[90%] max-w-7xl">
           <h2 className="mb-5 text-5xl font-bold">
-            Our Services
+            Layanan Kami
           </h2>
 
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -395,7 +451,7 @@ export default function Home() {
         <div className="mx-auto w-[90%] max-w-7xl">
 
           <h2 className="mb-5 text-5xl font-bold">
-            Company Journey
+            Perjalanan Perusahaan
           </h2>
 
           <p className="mb-16 max-w-2xl text-slate-400">
@@ -408,21 +464,21 @@ export default function Home() {
             {[
               {
                 year: '2017',
-                title: 'Company Founded',
+                title: 'Perusahaan Didirikan',
                 desc:
                   'CV. HEXA ANJAYA resmi berdiri dan mulai menyediakan layanan teknologi informasi untuk koperasi dan perbankan.',
               },
 
               {
                 year: '2020',
-                title: 'Digital Expansion',
+                title: 'Ekspansi Digital',
                 desc:
                   'Mengembangkan layanan digital seperti mobile banking, web application, dan sistem pelaporan modern.',
               },
 
               {
                 year: '2025',
-                title: 'Become PT. HEXA ANJAYA TECH',
+                title: 'Menjadi PT. HEXA ANJAYA TECH',
                 desc:
                   'Transformasi perusahaan menjadi PT. HEXA ANJAYA TECH untuk memperluas jangkauan dan kualitas layanan teknologi.',
               },
@@ -501,37 +557,29 @@ export default function Home() {
         <div className="mx-auto w-[90%] max-w-6xl cta">
           <div className="rounded-[36px] border border-white/10 bg-gradient-to-r from-blue-600/20 to-cyan-400/10 px-10 py-24 text-center">
             <h2 className="mb-5 text-5xl font-bold">
-              Let&apos;s Build Your Digital Future
+              Mari Membangun Masa Depan Digital Anda
             </h2>
 
             <p className="mx-auto mb-8 max-w-2xl text-slate-300">
-              Secure, scalable and innovative technology
-              solutions for your company.
+              Solusi teknologi yang aman, skalabel, dan inovatif
+              untuk perusahaan Anda.
             </p>
 
-            <button className="rounded-full cursor-pointer bg-gradient-to-r from-blue-600 to-cyan-400 px-8 py-4 font-semibold">
-              Contact Us
-            </button>
+            <a
+              href={buildWhatsAppLink(
+                'Halo, saya ingin bertanya lebih lanjut mengenai layanan PT. HEXA ANJAYA TECH.'
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block cursor-pointer rounded-full bg-gradient-to-r from-blue-600 to-cyan-400 px-8 py-4 font-semibold"
+            >
+              Hubungi Kami
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/10 py-8">
-        <div className="mx-auto flex w-[90%] max-w-7xl flex-wrap justify-between gap-5 text-slate-400">
-          <div>
-            <h3 className="font-bold text-white">
-              PT. HEXA ANJAYA TECH
-            </h3>
-
-            <p>Technology Solutions Company</p>
-          </div>
-
-          <p>
-            © 2026 PT. HEXA ANJAYA TECH
-          </p>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Scroll Button */}
       <button
